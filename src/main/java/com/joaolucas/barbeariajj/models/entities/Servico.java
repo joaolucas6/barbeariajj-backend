@@ -22,7 +22,7 @@ public class Servico {
     private BigDecimal preco;
     @OneToMany(mappedBy = "servico")
     private List<PedidoAgendamento> pedidosAgendamento = new ArrayList<>();
-    @OneToMany(mappedBy = "servico")
+    @ManyToMany(mappedBy = "servicos")
     private List<Agendamento> agendamentos = new ArrayList<>();
     @ManyToMany
     @JoinTable(
