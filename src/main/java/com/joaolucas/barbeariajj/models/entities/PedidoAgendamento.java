@@ -12,6 +12,9 @@ import java.util.Objects;
 @Table(name = "tb_pedidos_agendamento")
 public class PedidoAgendamento {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
@@ -40,7 +43,8 @@ public class PedidoAgendamento {
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
-    public PedidoAgendamento(Cliente cliente, Barbeiro barbeiro, LocalDateTime horarioInicio, LocalDateTime horarioFim, List<Servico> servicos, MetodoPagamento metodoPagamento, Status status, String exigenciasDoCliente, LocalDateTime criadoEm) {
+    public PedidoAgendamento(Long id, Cliente cliente, Barbeiro barbeiro, LocalDateTime horarioInicio, LocalDateTime horarioFim, List<Servico> servicos, MetodoPagamento metodoPagamento, Status status, String exigenciasDoCliente, LocalDateTime criadoEm) {
+        this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
         this.horarioInicio = horarioInicio;
@@ -124,23 +128,32 @@ public class PedidoAgendamento {
         this.criadoEm = criadoEm;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PedidoAgendamento that = (PedidoAgendamento) o;
-        return Objects.equals(cliente, that.cliente) && Objects.equals(barbeiro, that.barbeiro) && Objects.equals(horarioInicio, that.horarioInicio) && Objects.equals(horarioFim, that.horarioFim) && Objects.equals(servicos, that.servicos) && metodoPagamento == that.metodoPagamento && status == that.status && Objects.equals(exigenciasDoCliente, that.exigenciasDoCliente) && Objects.equals(criadoEm, that.criadoEm);
+        return Objects.equals(id, that.id) && Objects.equals(cliente, that.cliente) && Objects.equals(barbeiro, that.barbeiro) && Objects.equals(horarioInicio, that.horarioInicio) && Objects.equals(horarioFim, that.horarioFim) && Objects.equals(servicos, that.servicos) && metodoPagamento == that.metodoPagamento && status == that.status && Objects.equals(exigenciasDoCliente, that.exigenciasDoCliente) && Objects.equals(criadoEm, that.criadoEm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cliente, barbeiro, horarioInicio, horarioFim, servicos, metodoPagamento, status, exigenciasDoCliente, criadoEm);
+        return Objects.hash(id, cliente, barbeiro, horarioInicio, horarioFim, servicos, metodoPagamento, status, exigenciasDoCliente, criadoEm);
     }
 
     @Override
     public String toString() {
         return "PedidoAgendamento{" +
-                "cliente=" + cliente +
+                "id=" + id +
+                ", cliente=" + cliente +
                 ", barbeiro=" + barbeiro +
                 ", horarioInicio=" + horarioInicio +
                 ", horarioFim=" + horarioFim +
