@@ -8,6 +8,9 @@ import java.util.Objects;
 @Table(name = "tb_avaliacoes")
 public class Avaliacao {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
