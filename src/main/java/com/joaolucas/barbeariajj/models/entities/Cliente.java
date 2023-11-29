@@ -23,4 +23,28 @@ public class Cliente extends User{
     public Cliente(Long id, String nome, String sobrenome, String email, String senha, String numeroTelefone, Genero genero, String cpf, Role role) {
         super(id, nome, sobrenome, email, senha, numeroTelefone, genero, cpf, role);
     }
+
+    public List<PedidoAgendamento> getPedidosAgendamento() {
+        return pedidosAgendamento;
+    }
+
+    public void setPedidosAgendamento(List<PedidoAgendamento> pedidosAgendamento) {
+        this.pedidosAgendamento = pedidosAgendamento;
+    }
+
+    public List<Agendamento> getAgendamentos() {
+        return agendamentos;
+    }
+
+    public void setAgendamentos(List<Agendamento> agendamentos) {
+        this.agendamentos = agendamentos;
+    }
+
+    public List<Avaliacao> getAvaliacoes() {
+        return avaliacoes;
+    }
+
+    public void setAvaliacoes(List<Avaliacao> avaliacoes) {
+        this.avaliacoes = avaliacoes;
+    }
 }

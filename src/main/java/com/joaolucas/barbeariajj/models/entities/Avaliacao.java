@@ -26,7 +26,8 @@ public class Avaliacao {
     @Column(name = "comentarios")
     private String comentarios;
 
-    public Avaliacao(Cliente cliente, Barbeiro barbeiro, Agendamento agendamento, Double nota, String comentarios) {
+    public Avaliacao(Long id, Cliente cliente, Barbeiro barbeiro, Agendamento agendamento, Double nota, String comentarios) {
+        this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
         this.agendamento = agendamento;
@@ -74,23 +75,32 @@ public class Avaliacao {
         this.comentarios = comentarios;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Avaliacao avaliacao = (Avaliacao) o;
-        return Objects.equals(cliente, avaliacao.cliente) && Objects.equals(barbeiro, avaliacao.barbeiro) && Objects.equals(agendamento, avaliacao.agendamento) && Objects.equals(nota, avaliacao.nota) && Objects.equals(comentarios, avaliacao.comentarios);
+        return Objects.equals(id, avaliacao.id) && Objects.equals(cliente, avaliacao.cliente) && Objects.equals(barbeiro, avaliacao.barbeiro) && Objects.equals(agendamento, avaliacao.agendamento) && Objects.equals(nota, avaliacao.nota) && Objects.equals(comentarios, avaliacao.comentarios);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cliente, barbeiro, agendamento, nota, comentarios);
+        return Objects.hash(id, cliente, barbeiro, agendamento, nota, comentarios);
     }
 
     @Override
     public String toString() {
         return "Avaliacao{" +
-                "cliente=" + cliente +
+                "id=" + id +
+                ", cliente=" + cliente +
                 ", barbeiro=" + barbeiro +
                 ", agendamento=" + agendamento +
                 ", nota=" + nota +
