@@ -61,8 +61,11 @@ public class ValidacaoDeDados {
         return true;
     }
 
-    public static boolean avaliacaoValido(AvaliacaoDTO avaliacaoDTO){
+    public static boolean avaliacaoValido(AvaliacaoDTO avaliacaoDTO, boolean isUpdateRequest){
         if(todosOsAtributosSaoNulos(avaliacaoDTO)) return false;
+        if(!isUpdateRequest){
+            if(avaliacaoDTO.getNota() == null || avaliacaoDTO.getComentarios() == null) return false;
+        }
         if(avaliacaoDTO.getNota() != null && avaliacaoDTO.getNota() < 0 || avaliacaoDTO.getNota() != null && avaliacaoDTO.getNota() > 10) return false;
         if(avaliacaoDTO.getComentarios() != null && avaliacaoDTO.getComentarios().length() > 500 || avaliacaoDTO.getComentarios() != null && avaliacaoDTO.getComentarios().isBlank()) return false;
         return true;

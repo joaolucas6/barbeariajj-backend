@@ -26,6 +26,9 @@ public class Avaliacao {
     @Column(name = "comentarios")
     private String comentarios;
 
+    public Avaliacao() {
+    }
+
     public Avaliacao(Long id, Cliente cliente, Barbeiro barbeiro, Agendamento agendamento, Double nota, String comentarios) {
         this.id = id;
         this.cliente = cliente;
