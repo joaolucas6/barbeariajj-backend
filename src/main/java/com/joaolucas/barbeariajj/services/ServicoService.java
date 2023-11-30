@@ -79,5 +79,5 @@ public class ServicoService {
         servicoRepository.save(servico);
         barbeiroRepository.save(barbeiro);
     }
-    
+
 }

@@ -24,6 +24,9 @@ public class Barbeiro extends User {
     @ManyToMany(mappedBy = "barbeiro")
     private List<Servico> especialidades = new ArrayList<>();
 
+    public Barbeiro() {
+    }
+
     public Barbeiro(Long id, String nome, String sobrenome, String email, String senha, String numeroTelefone, Genero genero, String cpf, Role role) {
         super(id, nome, sobrenome, email, senha, numeroTelefone, genero, cpf, role);
     }
