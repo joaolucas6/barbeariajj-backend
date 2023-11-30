@@ -32,6 +32,9 @@ public class Servico {
     )
     private List<Barbeiro> barbeirosEspecializados = new ArrayList<>();
 
+    public Servico() {
+    }
+
     public Servico(Long id, String nome, String descricao, BigDecimal preco) {
         this.id = id;
         this.nome = nome;
