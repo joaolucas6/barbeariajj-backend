@@ -22,7 +22,7 @@ public class AgendamentoDTO {
     private String exigenciasDoCliente;
     private Long avaliacaoDoClienteId;
     private BigDecimal precoAdicional;
-    private Double precoDescontado;
+    private BigDecimal precoDescontado;
     private BigDecimal precoTotal;
     private LocalDateTime criadoEm;
 
@@ -131,11 +131,11 @@ public class AgendamentoDTO {
         this.precoAdicional = precoAdicional;
     }
 
-    public Double getPrecoDescontado() {
+    public BigDecimal getPrecoDescontado() {
         return precoDescontado;
     }
 
-    public void setPrecoDescontado(Double precoDescontado) {
+    public void setPrecoDescontado(BigDecimal precoDescontado) {
         this.precoDescontado = precoDescontado;
     }
 

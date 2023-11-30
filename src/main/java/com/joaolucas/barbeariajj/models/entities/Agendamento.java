@@ -46,13 +46,13 @@ public class Agendamento {
     @Column(name = "preco_adicional")
     private BigDecimal precoAdicional;
     @Column(name = "preco_descontado")
-    private Double precoDescontado;
+    private BigDecimal precoDescontado;
     @Column(name = "preco_total")
     private BigDecimal precoTotal;
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
-    public Agendamento(Long id, Cliente cliente, Barbeiro barbeiro, LocalDateTime horarioInicio, LocalDateTime horarioFim, List<Servico> servicos, MetodoPagamento metodoPagamento, Status status, String exigenciasDoCliente, Avaliacao avaliacaoDoCliente, BigDecimal precoAdicional, Double precoDescontado, BigDecimal precoTotal, LocalDateTime criadoEm) {
+    public Agendamento(Long id, Cliente cliente, Barbeiro barbeiro, LocalDateTime horarioInicio, LocalDateTime horarioFim, List<Servico> servicos, MetodoPagamento metodoPagamento, Status status, String exigenciasDoCliente, Avaliacao avaliacaoDoCliente, BigDecimal precoAdicional, BigDecimal precoDescontado, BigDecimal precoTotal, LocalDateTime criadoEm) {
         this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
@@ -157,11 +157,11 @@ public class Agendamento {
         this.precoAdicional = precoAdicional;
     }
 
-    public Double getPrecoDescontado() {
+    public BigDecimal getPrecoDescontado() {
         return precoDescontado;
     }
 
-    public void setPrecoDescontado(Double precoDescontado) {
+    public void setPrecoDescontado(BigDecimal precoDescontado) {
         this.precoDescontado = precoDescontado;
     }
 
