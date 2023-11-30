@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class PedidoAgendamentoService {
     private final BarbeiroRepository barbeiroRepository;
     private final ServicoRepository servicoRepository;
     private final AgendamentoRepository agendamentoRepository;
+    private final Clock clock;
 
     public List<PedidoAgendamentoDTO> encontrarTodos(){
         return pedidoAgendamentoRepository.findAll().stream().map(PedidoAgendamentoDTO::new).toList();
@@ -31,12 +33,13 @@ public class PedidoAgendamentoService {
     }
 
     public PedidoAgendamentoDTO criar(PedidoAgendamentoDTO pedidoAgendamentoDTO){
-        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, false)) throw new RuntimeException();
 
         Cliente cliente = clienteRepository.findById(pedidoAgendamentoDTO.getClienteId()).orElseThrow();
         Barbeiro barbeiro = barbeiroRepository.findById(pedidoAgendamentoDTO.getBarbeiroId()).orElseThrow();
 
         PedidoAgendamento pedidoAgendamento = new PedidoAgendamento();
+
 
         if(!barbeiro.getAgendamentos().stream().filter(a -> pedidoAgendamentoDTO.getHorarioInicio().isAfter(a.getHorarioInicio()) && pedidoAgendamentoDTO.getHorarioFim().isBefore(a.getHorarioFim())).toList().isEmpty()) throw new RuntimeException();
 
@@ -46,7 +49,7 @@ public class PedidoAgendamentoService {
         pedidoAgendamento.setMetodoPagamento(pedidoAgendamentoDTO.getMetodoPagamento());
         pedidoAgendamento.setStatus(Status.PENDENTE);
         pedidoAgendamento.setExigenciasDoCliente(pedidoAgendamentoDTO.getExigenciasDoCliente());
-        pedidoAgendamento.setCriadoEm(LocalDateTime.now());
+        pedidoAgendamento.setCriadoEm(LocalDateTime.now(clock));
 
         PedidoAgendamento pedidoAgendamentoSalvo = pedidoAgendamentoRepository.save(pedidoAgendamento);
         cliente.getPedidosAgendamento().add(pedidoAgendamentoSalvo);
@@ -59,7 +62,7 @@ public class PedidoAgendamentoService {
     }
 
     public PedidoAgendamentoDTO atualizar(Long id, PedidoAgendamentoDTO pedidoAgendamentoDTO){
-        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, true)) throw new RuntimeException();
 
         PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow();
 
@@ -102,7 +105,7 @@ public class PedidoAgendamentoService {
         agendamento.setStatus(Status.CONFIRMADO);
         agendamento.setExigenciasDoCliente(pedidoAgendamento.getExigenciasDoCliente());
         agendamento.setPrecoTotal(pedidoAgendamento.getServicos().stream().map(Servico::getPreco).reduce(BigDecimal.ZERO, BigDecimal::add));
-        agendamento.setCriadoEm(LocalDateTime.now());
+        agendamento.setCriadoEm(LocalDateTime.now(clock));
         agendamento.setBarbeiro(barbeiro);
         agendamento.setCliente(cliente);
 

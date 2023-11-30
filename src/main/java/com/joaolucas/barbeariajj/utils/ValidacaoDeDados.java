@@ -17,10 +17,16 @@ public class ValidacaoDeDados {
         return true;
     }
 
-    public static boolean pedidoAgendamentoValido(PedidoAgendamentoDTO pedidoAgendamentoDTO){
+    public static boolean pedidoAgendamentoValido(PedidoAgendamentoDTO pedidoAgendamentoDTO, boolean isUpdateRequest){
         if(todosOsAtributosSaoNulos(pedidoAgendamentoDTO)) return false;
         if(pedidoAgendamentoDTO.getHorarioInicio() != null && pedidoAgendamentoDTO.getHorarioInicio().isAfter(pedidoAgendamentoDTO.getHorarioFim())) return false;
         if(pedidoAgendamentoDTO.getExigenciasDoCliente() != null && pedidoAgendamentoDTO.getExigenciasDoCliente().length() > 500 || pedidoAgendamentoDTO.getExigenciasDoCliente() != null && pedidoAgendamentoDTO.getExigenciasDoCliente().isBlank() ) return false;
+
+        if(!isUpdateRequest){
+            if(pedidoAgendamentoDTO.getClienteId() == null || pedidoAgendamentoDTO.getBarbeiroId() == null) return false;
+            if(pedidoAgendamentoDTO.getServicosId() == null) return false;
+            if(pedidoAgendamentoDTO.getHorarioInicio() == null || pedidoAgendamentoDTO.getHorarioFim() == null) return false;
+        }
 
         return true;
     }

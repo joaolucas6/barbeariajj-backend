@@ -20,6 +20,9 @@ public class Cliente extends User{
     @OneToMany(mappedBy = "cliente")
     private List<Avaliacao> avaliacoes = new ArrayList<>();
 
+    public Cliente() {
+    }
+
     public Cliente(Long id, String nome, String sobrenome, String email, String senha, String numeroTelefone, Genero genero, String cpf, Role role) {
         super(id, nome, sobrenome, email, senha, numeroTelefone, genero, cpf, role);
     }
