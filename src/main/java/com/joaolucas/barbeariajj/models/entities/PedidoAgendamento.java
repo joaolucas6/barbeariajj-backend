@@ -43,6 +43,9 @@ public class PedidoAgendamento {
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
+    public PedidoAgendamento() {
+    }
+
     public PedidoAgendamento(Long id, Cliente cliente, Barbeiro barbeiro, LocalDateTime horarioInicio, LocalDateTime horarioFim, List<Servico> servicos, MetodoPagamento metodoPagamento, Status status, String exigenciasDoCliente, LocalDateTime criadoEm) {
         this.id = id;
         this.cliente = cliente;

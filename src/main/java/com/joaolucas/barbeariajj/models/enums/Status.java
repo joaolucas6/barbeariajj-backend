@@ -5,7 +5,7 @@ public enum Status {
     ACEITO,
     NEGADO,
 
-    AGUARDANDO,
+    CONFIRMADO,
     CONCLUIDO,
     CANCELADO
 
