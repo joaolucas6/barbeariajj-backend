@@ -4,6 +4,7 @@ import com.joaolucas.barbeariajj.models.dto.AgendamentoDTO;
 import com.joaolucas.barbeariajj.models.entities.Agendamento;
 import com.joaolucas.barbeariajj.repositories.AgendamentoRepository;
 import com.joaolucas.barbeariajj.repositories.ServicoRepository;
+import com.joaolucas.barbeariajj.utils.ValidacaoDeDados;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ public class AgendamentoService {
     }
 
     public AgendamentoDTO atualizar(Long id, AgendamentoDTO agendamentoDTO){
+        if(!ValidacaoDeDados.agendamentoValido(agendamentoDTO)) throw new RuntimeException();
+
         Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow();
 
         if(agendamentoDTO.getServicosId() != null){
