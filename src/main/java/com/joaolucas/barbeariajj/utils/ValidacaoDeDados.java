@@ -35,9 +35,9 @@ public class ValidacaoDeDados {
         if(todosOsAtributosSaoNulos(clienteDTO)) return false;
         if(clienteDTO.getNome() != null && clienteDTO.getNome().length() > 50 || clienteDTO.getNome() != null && clienteDTO.getNome().isBlank()) return false;
         if(clienteDTO.getSobrenome() != null && clienteDTO.getSobrenome().length() > 50 || clienteDTO.getSobrenome() != null && clienteDTO.getSobrenome().isBlank()) return false;
-        if(!emailValido(clienteDTO.getEmail())) return false;
+        if(clienteDTO.getEmail() != null && !emailValido(clienteDTO.getEmail())) return false;
         if(clienteDTO.getNumeroTelefone() != null && clienteDTO.getNumeroTelefone().isBlank()) return false;
-        if(!cpfValido(clienteDTO.getCpf())) return false;
+        if(clienteDTO.getCpf() != null && !cpfValido(clienteDTO.getCpf())) return false;
         return true;
     }
 
@@ -45,9 +45,9 @@ public class ValidacaoDeDados {
         if(todosOsAtributosSaoNulos(barbeiroDTO)) return false;
         if(barbeiroDTO.getNome() != null && barbeiroDTO.getNome().length() > 50 || barbeiroDTO.getNome() != null && barbeiroDTO.getNome().isBlank()) return false;
         if(barbeiroDTO.getSobrenome() != null && barbeiroDTO.getSobrenome().length() > 50 || barbeiroDTO.getSobrenome() != null && barbeiroDTO.getSobrenome().isBlank()) return false;
-        if(!emailValido(barbeiroDTO.getEmail())) return false;
+        if(barbeiroDTO.getEmail() != null && !emailValido(barbeiroDTO.getEmail())) return false;
         if(barbeiroDTO.getNumeroTelefone() != null && barbeiroDTO.getNumeroTelefone().isBlank()) return false;
-        if(!cpfValido(barbeiroDTO.getCpf())) return false;
+        if(barbeiroDTO.getCpf() != null && !cpfValido(barbeiroDTO.getCpf())) return false;
         return true;
     }
 
@@ -55,9 +55,9 @@ public class ValidacaoDeDados {
         if(todosOsAtributosSaoNulos(adminDTO)) return false;
         if(adminDTO.getNome() != null && adminDTO.getNome().length() > 50 || adminDTO.getNome() != null && adminDTO.getNome().isBlank()) return false;
         if(adminDTO.getSobrenome() != null && adminDTO.getSobrenome().length() > 50 || adminDTO.getSobrenome() != null && adminDTO.getSobrenome().isBlank()) return false;
-        if(!emailValido(adminDTO.getEmail())) return false;
+        if(adminDTO.getEmail() != null && !emailValido(adminDTO.getEmail())) return false;
         if(adminDTO.getNumeroTelefone() != null && adminDTO.getNumeroTelefone().isBlank()) return false;
-        if(!cpfValido(adminDTO.getCpf())) return false;
+        if(adminDTO.getCpf() != null && !cpfValido(adminDTO.getCpf())) return false;
         return true;
     }
 
