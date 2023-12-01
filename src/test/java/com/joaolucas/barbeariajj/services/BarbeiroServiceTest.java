@@ -1,11 +1,8 @@
 package com.joaolucas.barbeariajj.services;
 
 import com.joaolucas.barbeariajj.models.dto.BarbeiroDTO;
-import com.joaolucas.barbeariajj.models.dto.ClienteDTO;
 import com.joaolucas.barbeariajj.models.entities.Barbeiro;
-import com.joaolucas.barbeariajj.models.entities.Cliente;
 import com.joaolucas.barbeariajj.repositories.BarbeiroRepository;
-import com.joaolucas.barbeariajj.repositories.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
