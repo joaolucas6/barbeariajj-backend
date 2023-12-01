@@ -25,17 +25,17 @@ public class BarbeiroService {
         return new BarbeiroDTO(barbeiroRepository.findById(id).orElseThrow());
     }
 
-    public BarbeiroDTO atualizar(Long id, ClienteDTO clienteDTO){
-        if(!ValidacaoDeDados.userValido(clienteDTO)) throw new RuntimeException();
+    public BarbeiroDTO atualizar(Long id, BarbeiroDTO barbeiroDTO){
+        if(!ValidacaoDeDados.userValido(barbeiroDTO)) throw new RuntimeException();
 
         Barbeiro barbeiro = barbeiroRepository.findById(id).orElseThrow();
 
-        if(clienteDTO.getNome() != null) barbeiro.setNome(clienteDTO.getNome());
-        if(clienteDTO.getSobrenome() != null) barbeiro.setSobrenome(clienteDTO.getSobrenome());
-        if(clienteDTO.getEmail() != null) barbeiro.setEmail(clienteDTO.getEmail());
-        if(clienteDTO.getNumeroTelefone() != null) barbeiro.setNumeroTelefone(clienteDTO.getNumeroTelefone());
-        if(clienteDTO.getGenero() != null) barbeiro.setGenero(clienteDTO.getGenero());
-        if(clienteDTO.getCpf() != null) barbeiro.setCpf(clienteDTO.getCpf());
+        if(barbeiroDTO.getNome() != null) barbeiro.setNome(barbeiroDTO.getNome());
+        if(barbeiroDTO.getSobrenome() != null) barbeiro.setSobrenome(barbeiroDTO.getSobrenome());
+        if(barbeiroDTO.getEmail() != null) barbeiro.setEmail(barbeiroDTO.getEmail());
+        if(barbeiroDTO.getNumeroTelefone() != null) barbeiro.setNumeroTelefone(barbeiroDTO.getNumeroTelefone());
+        if(barbeiroDTO.getGenero() != null) barbeiro.setGenero(barbeiroDTO.getGenero());
+        if(barbeiroDTO.getCpf() != null) barbeiro.setCpf(barbeiroDTO.getCpf());
 
         return new BarbeiroDTO(barbeiroRepository.save(barbeiro));
     }
