@@ -47,8 +47,6 @@ public class Agendamento {
     private BigDecimal precoAdicional;
     @Column(name = "preco_descontado")
     private BigDecimal precoDescontado;
-    @Column(name = "preco_total")
-    private BigDecimal precoTotal;
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
@@ -68,7 +66,6 @@ public class Agendamento {
         this.avaliacaoDoCliente = avaliacaoDoCliente;
         this.precoAdicional = precoAdicional;
         this.precoDescontado = precoDescontado;
-        this.precoTotal = precoTotal;
         this.criadoEm = criadoEm;
     }
 
@@ -168,14 +165,6 @@ public class Agendamento {
         this.precoDescontado = precoDescontado;
     }
 
-    public BigDecimal getPrecoTotal() {
-        return precoTotal;
-    }
-
-    public void setPrecoTotal(BigDecimal precoTotal) {
-        this.precoTotal = precoTotal;
-    }
-
     public LocalDateTime getCriadoEm() {
         return criadoEm;
     }
@@ -189,12 +178,12 @@ public class Agendamento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Agendamento that = (Agendamento) o;
-        return Objects.equals(cliente, that.cliente) && Objects.equals(barbeiro, that.barbeiro) && Objects.equals(horarioInicio, that.horarioInicio) && Objects.equals(horarioFim, that.horarioFim) && Objects.equals(servicos, that.servicos) && metodoPagamento == that.metodoPagamento && status == that.status && Objects.equals(exigenciasDoCliente, that.exigenciasDoCliente) && Objects.equals(avaliacaoDoCliente, that.avaliacaoDoCliente) && Objects.equals(precoAdicional, that.precoAdicional) && Objects.equals(precoDescontado, that.precoDescontado) && Objects.equals(precoTotal, that.precoTotal) && Objects.equals(criadoEm, that.criadoEm);
+        return Objects.equals(cliente, that.cliente) && Objects.equals(barbeiro, that.barbeiro) && Objects.equals(horarioInicio, that.horarioInicio) && Objects.equals(horarioFim, that.horarioFim) && Objects.equals(servicos, that.servicos) && metodoPagamento == that.metodoPagamento && status == that.status && Objects.equals(exigenciasDoCliente, that.exigenciasDoCliente) && Objects.equals(avaliacaoDoCliente, that.avaliacaoDoCliente) && Objects.equals(precoAdicional, that.precoAdicional) && Objects.equals(precoDescontado, that.precoDescontado) && Objects.equals(criadoEm, that.criadoEm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cliente, barbeiro, horarioInicio, horarioFim, servicos, metodoPagamento, status, exigenciasDoCliente, avaliacaoDoCliente, precoAdicional, precoDescontado, precoTotal, criadoEm);
+        return Objects.hash(cliente, barbeiro, horarioInicio, horarioFim, servicos, metodoPagamento, status, exigenciasDoCliente, avaliacaoDoCliente, precoAdicional, precoDescontado,  criadoEm);
     }
 
     @Override
@@ -211,7 +200,6 @@ public class Agendamento {
                 ", avaliacaoDoCliente=" + avaliacaoDoCliente +
                 ", precoAdicional=" + precoAdicional +
                 ", precoDescontado=" + precoDescontado +
-                ", precoTotal=" + precoTotal +
                 ", criadoEm=" + criadoEm +
                 '}';
     }

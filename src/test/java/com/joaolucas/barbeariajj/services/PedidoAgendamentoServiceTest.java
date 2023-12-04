@@ -153,7 +153,6 @@ class PedidoAgendamentoServiceTest {
         pedidoAgendamento.setServicos(List.of());
         agendamento.setStatus(Status.CONFIRMADO);
         agendamento.setCriadoEm(LocalDateTime.now(clock));
-        agendamento.setPrecoTotal(BigDecimal.ZERO);
         agendamento.setServicos(List.of());
         agendamento.setBarbeiro(barbeiro);
         agendamento.setCliente(cliente);

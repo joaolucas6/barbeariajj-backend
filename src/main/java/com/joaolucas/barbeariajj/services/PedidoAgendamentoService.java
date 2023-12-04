@@ -104,7 +104,6 @@ public class PedidoAgendamentoService {
         agendamento.setMetodoPagamento(pedidoAgendamento.getMetodoPagamento());
         agendamento.setStatus(Status.CONFIRMADO);
         agendamento.setExigenciasDoCliente(pedidoAgendamento.getExigenciasDoCliente());
-        agendamento.setPrecoTotal(pedidoAgendamento.getServicos().stream().map(Servico::getPreco).reduce(BigDecimal.ZERO, BigDecimal::add));
         agendamento.setCriadoEm(LocalDateTime.now(clock));
         agendamento.setBarbeiro(barbeiro);
         agendamento.setCliente(cliente);
