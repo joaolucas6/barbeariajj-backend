@@ -15,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,10 +42,24 @@ class AvaliacaoServiceTest {
     private Agendamento agendamento;
     private Barbeiro barbeiro;
     private Cliente cliente;
+    @Mock
+    private Clock clock;
+
+    private ZonedDateTime NOW = ZonedDateTime.of(
+            2023,
+            11,
+            30,
+            3,
+            36,
+            15,
+            0,
+            ZoneId.of("GMT")
+    );
+
 
     @BeforeEach
     void setUp() {
-        emTeste = new AvaliacaoService(avaliacaoRepository, agendamentoRepository, barbeiroRepository, clienteRepository);
+        emTeste = new AvaliacaoService(avaliacaoRepository, agendamentoRepository, barbeiroRepository, clienteRepository, clock);
         avaliacao = new Avaliacao();
     }
 
@@ -65,6 +83,10 @@ class AvaliacaoServiceTest {
 
     @Test
     void deveCriarAvaliacao() {
+
+        when(clock.getZone()).thenReturn(NOW.getZone());
+        when(clock.instant()).thenReturn(NOW.toInstant());
+
         barbeiro = new Barbeiro();
         cliente = new Cliente();
         agendamento = new Agendamento();
@@ -77,6 +99,7 @@ class AvaliacaoServiceTest {
         avaliacao.setAgendamento(agendamento);
         avaliacao.setComentarios("thats all i wanted to doooooooooooooo");
         avaliacao.setNota(10.0);
+        avaliacao.setCriadoEm(LocalDateTime.now(clock));
 
         when(agendamentoRepository.findById(1L)).thenReturn(Optional.of(agendamento));
         when(avaliacaoRepository.save(avaliacao)).thenReturn(avaliacao);

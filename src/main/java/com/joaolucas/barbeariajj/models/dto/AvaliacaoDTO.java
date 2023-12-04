@@ -2,6 +2,7 @@ package com.joaolucas.barbeariajj.models.dto;
 
 import com.joaolucas.barbeariajj.models.entities.Avaliacao;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class AvaliacaoDTO {
@@ -11,6 +12,7 @@ public class AvaliacaoDTO {
     private Long agendamentoId;
     private Double nota;
     private String comentarios;
+    private LocalDateTime criadoEm;
 
     public AvaliacaoDTO(Avaliacao avaliacao){
         setId(avaliacao.getId());
@@ -19,6 +21,7 @@ public class AvaliacaoDTO {
         if(avaliacao.getAgendamento() != null) setAgendamentoId(avaliacao.getAgendamento().getId());
         setNota(avaliacao.getNota());
         setComentarios(avaliacao.getComentarios());
+        setCriadoEm(avaliacao.getCriadoEm());
     }
 
     public Long getId() {
@@ -69,17 +72,25 @@ public class AvaliacaoDTO {
         this.comentarios = comentarios;
     }
 
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AvaliacaoDTO that = (AvaliacaoDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(clienteId, that.clienteId) && Objects.equals(barbeiroId, that.barbeiroId) && Objects.equals(agendamentoId, that.agendamentoId) && Objects.equals(nota, that.nota) && Objects.equals(comentarios, that.comentarios);
+        return Objects.equals(id, that.id) && Objects.equals(clienteId, that.clienteId) && Objects.equals(barbeiroId, that.barbeiroId) && Objects.equals(agendamentoId, that.agendamentoId) && Objects.equals(nota, that.nota) && Objects.equals(comentarios, that.comentarios) && Objects.equals(criadoEm, that.criadoEm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clienteId, barbeiroId, agendamentoId, nota, comentarios);
+        return Objects.hash(id, clienteId, barbeiroId, agendamentoId, nota, comentarios, criadoEm);
     }
 
     @Override
@@ -91,6 +102,7 @@ public class AvaliacaoDTO {
                 ", agendamentoId=" + agendamentoId +
                 ", nota=" + nota +
                 ", comentarios='" + comentarios + '\'' +
+                ", criadoEm=" + criadoEm +
                 '}';
     }
 }

@@ -2,6 +2,7 @@ package com.joaolucas.barbeariajj.models.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -26,16 +27,20 @@ public class Avaliacao {
     @Column(name = "comentarios")
     private String comentarios;
 
+    @Column(name = "criado_em")
+    private LocalDateTime criadoEm;
+
     public Avaliacao() {
     }
 
-    public Avaliacao(Long id, Cliente cliente, Barbeiro barbeiro, Agendamento agendamento, Double nota, String comentarios) {
+    public Avaliacao(Long id, Cliente cliente, Barbeiro barbeiro, Agendamento agendamento, Double nota, String comentarios, LocalDateTime criadoEm) {
         this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
         this.agendamento = agendamento;
         this.nota = nota;
         this.comentarios = comentarios;
+        this.criadoEm = criadoEm;
     }
 
     public Cliente getCliente() {
@@ -86,17 +91,25 @@ public class Avaliacao {
         this.id = id;
     }
 
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(LocalDateTime criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Avaliacao avaliacao = (Avaliacao) o;
-        return Objects.equals(id, avaliacao.id) && Objects.equals(cliente, avaliacao.cliente) && Objects.equals(barbeiro, avaliacao.barbeiro) && Objects.equals(agendamento, avaliacao.agendamento) && Objects.equals(nota, avaliacao.nota) && Objects.equals(comentarios, avaliacao.comentarios);
+        return Objects.equals(id, avaliacao.id) && Objects.equals(cliente, avaliacao.cliente) && Objects.equals(barbeiro, avaliacao.barbeiro) && Objects.equals(agendamento, avaliacao.agendamento) && Objects.equals(nota, avaliacao.nota) && Objects.equals(comentarios, avaliacao.comentarios) && Objects.equals(criadoEm, avaliacao.criadoEm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cliente, barbeiro, agendamento, nota, comentarios);
+        return Objects.hash(id, cliente, barbeiro, agendamento, nota, comentarios, criadoEm);
     }
 
     @Override
@@ -108,6 +121,7 @@ public class Avaliacao {
                 ", agendamento=" + agendamento +
                 ", nota=" + nota +
                 ", comentarios='" + comentarios + '\'' +
+                ", criadoEm=" + criadoEm +
                 '}';
     }
 }

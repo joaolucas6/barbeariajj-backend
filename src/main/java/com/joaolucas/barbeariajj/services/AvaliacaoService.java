@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +25,7 @@ public class AvaliacaoService {
     private final AgendamentoRepository agendamentoRepository;
     private final BarbeiroRepository barbeiroRepository;
     private final ClienteRepository clienteRepository;
+    private final Clock clock;
 
     public List<AvaliacaoDTO> encontrarTodos(){
         return avaliacaoRepository.findAll().stream().map(AvaliacaoDTO::new).toList();
@@ -47,6 +49,7 @@ public class AvaliacaoService {
         avaliacao.setNota(avaliacaoDTO.getNota());
         avaliacao.setComentarios(avaliacaoDTO.getComentarios());
         avaliacao.setAgendamento(agendamento);
+        avaliacao.setCriadoEm(LocalDateTime.now(clock));
 
         Avaliacao avaliacaoSalva = avaliacaoRepository.save(avaliacao);
         barbeiro.getAvaliacoes().add(avaliacaoSalva);
