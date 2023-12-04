@@ -1,5 +1,7 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.ClienteDTO;
 import com.joaolucas.barbeariajj.models.entities.Cliente;
 import com.joaolucas.barbeariajj.repositories.ClienteRepository;
@@ -20,13 +22,13 @@ public class ClienteService {
     }
 
     public ClienteDTO encontrarPorId(Long id){
-        return new ClienteDTO(clienteRepository.findById(id).orElseThrow());
+        return new ClienteDTO(clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não foi encontrado com ID: " + id)));
     }
 
     public ClienteDTO atualizar(Long id, ClienteDTO clienteDTO){
-        if(!ValidacaoDeDados.userValido(clienteDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.userValido(clienteDTO)) throw new BadRequestException("Dados do cliente são inválidos");
 
-        Cliente cliente = clienteRepository.findById(id).orElseThrow();
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não foi encontrado com ID: " + id));
 
         if(clienteDTO.getNome() != null) cliente.setNome(clienteDTO.getNome());
         if(clienteDTO.getSobrenome() != null) cliente.setSobrenome(clienteDTO.getSobrenome());
@@ -39,7 +41,7 @@ public class ClienteService {
     }
 
     public void deletar(Long id){
-        Cliente cliente = clienteRepository.findById(id).orElseThrow();
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não foi encontrado com ID: " + id));
         clienteRepository.delete(cliente);
     }
 }
