@@ -1,5 +1,8 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.BusinessLogicException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.PedidoAgendamentoDTO;
 import com.joaolucas.barbeariajj.models.entities.*;
 import com.joaolucas.barbeariajj.models.enums.Status;
@@ -29,23 +32,23 @@ public class PedidoAgendamentoService {
     }
 
     public PedidoAgendamentoDTO encontrarPorId(Long id){
-        return new PedidoAgendamentoDTO(pedidoAgendamentoRepository.findById(id).orElseThrow());
+        return new PedidoAgendamentoDTO(pedidoAgendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de agendamento não foi encontrado com ID: " + id)));
     }
 
     public PedidoAgendamentoDTO criar(PedidoAgendamentoDTO pedidoAgendamentoDTO){
-        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, false)) throw new RuntimeException();
+        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, false)) throw new BadRequestException("Dados do pedido de agendamento são inválidos");
 
-        Cliente cliente = clienteRepository.findById(pedidoAgendamentoDTO.getClienteId()).orElseThrow();
-        Barbeiro barbeiro = barbeiroRepository.findById(pedidoAgendamentoDTO.getBarbeiroId()).orElseThrow();
+        Cliente cliente = clienteRepository.findById(pedidoAgendamentoDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente não foi encontrado com ID: " + pedidoAgendamentoDTO.getClienteId()));
+        Barbeiro barbeiro = barbeiroRepository.findById(pedidoAgendamentoDTO.getBarbeiroId()).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + pedidoAgendamentoDTO.getBarbeiroId()));
 
         PedidoAgendamento pedidoAgendamento = new PedidoAgendamento();
 
 
-        if(!barbeiro.getAgendamentos().stream().filter(a -> pedidoAgendamentoDTO.getHorarioInicio().isAfter(a.getHorarioInicio()) && pedidoAgendamentoDTO.getHorarioFim().isBefore(a.getHorarioFim())).toList().isEmpty()) throw new RuntimeException();
+        if(!barbeiro.getAgendamentos().stream().filter(a -> pedidoAgendamentoDTO.getHorarioInicio().isAfter(a.getHorarioInicio()) && pedidoAgendamentoDTO.getHorarioFim().isBefore(a.getHorarioFim())).toList().isEmpty()) throw new BusinessLogicException("Horário não está disponível");
 
         pedidoAgendamento.setHorarioInicio(pedidoAgendamentoDTO.getHorarioInicio());
         pedidoAgendamento.setHorarioFim(pedidoAgendamentoDTO.getHorarioFim());
-        pedidoAgendamento.setServicos(pedidoAgendamentoDTO.getServicosId().stream().map(id -> servicoRepository.findById(id).orElseThrow()).toList());
+        pedidoAgendamento.setServicos(pedidoAgendamentoDTO.getServicosId().stream().map(id -> servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + id))).toList());
         pedidoAgendamento.setMetodoPagamento(pedidoAgendamentoDTO.getMetodoPagamento());
         pedidoAgendamento.setStatus(Status.PENDENTE);
         pedidoAgendamento.setExigenciasDoCliente(pedidoAgendamentoDTO.getExigenciasDoCliente());
@@ -62,19 +65,19 @@ public class PedidoAgendamentoService {
     }
 
     public PedidoAgendamentoDTO atualizar(Long id, PedidoAgendamentoDTO pedidoAgendamentoDTO){
-        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, true)) throw new RuntimeException();
+        if(!ValidacaoDeDados.pedidoAgendamentoValido(pedidoAgendamentoDTO, true)) throw new BadRequestException("Dados do pedido de agendamento são inválidos");
 
-        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow();
+        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de agendamento não foi encontrado com ID: " + id));
 
         if(pedidoAgendamentoDTO.getHorarioInicio() != null && pedidoAgendamentoDTO.getHorarioFim() != null){
-            if(!pedidoAgendamento.getBarbeiro().getAgendamentos().stream().filter(a -> pedidoAgendamentoDTO.getHorarioInicio().isAfter(a.getHorarioInicio()) && pedidoAgendamentoDTO.getHorarioFim().isBefore(a.getHorarioFim())).toList().isEmpty()) throw new RuntimeException();
-            if(pedidoAgendamento.getStatus() != Status.PENDENTE) throw new RuntimeException();
+            if(!pedidoAgendamento.getBarbeiro().getAgendamentos().stream().filter(a -> pedidoAgendamentoDTO.getHorarioInicio().isAfter(a.getHorarioInicio()) && pedidoAgendamentoDTO.getHorarioFim().isBefore(a.getHorarioFim())).toList().isEmpty()) throw new BusinessLogicException("Horário já ocupado");
+            if(pedidoAgendamento.getStatus() != Status.PENDENTE) throw new BusinessLogicException("O pedido de agendamento já foi aceito ou negado");
 
             pedidoAgendamento.setHorarioInicio(pedidoAgendamentoDTO.getHorarioInicio());
             pedidoAgendamento.setHorarioFim(pedidoAgendamentoDTO.getHorarioFim());
         }
 
-        if(pedidoAgendamentoDTO.getServicosId() != null) pedidoAgendamento.setServicos(pedidoAgendamentoDTO.getServicosId().stream().map(ida -> servicoRepository.findById(id).orElseThrow()).toList());
+        if(pedidoAgendamentoDTO.getServicosId() != null) pedidoAgendamento.setServicos(pedidoAgendamentoDTO.getServicosId().stream().map(ida -> servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + ida))).toList());
 
         if(pedidoAgendamentoDTO.getMetodoPagamento() != null) pedidoAgendamento.setMetodoPagamento(pedidoAgendamentoDTO.getMetodoPagamento());
 
@@ -84,14 +87,14 @@ public class PedidoAgendamentoService {
     }
 
     public void deletar(Long id){
-        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow();
-        if(pedidoAgendamento.getStatus() != Status.PENDENTE) throw new RuntimeException();
+        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de agendamento não foi encontrado com ID: " + id));
+        if(pedidoAgendamento.getStatus() != Status.PENDENTE) throw new BusinessLogicException("O pedido de agendamento já foi aceito ou negado");
 
         pedidoAgendamentoRepository.delete(pedidoAgendamento);
     }
 
     public void aceitarPedido(Long id){
-        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow();
+        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de agendamento não foi encontrado com ID: " + id));
         Barbeiro barbeiro = pedidoAgendamento.getBarbeiro();
         Cliente cliente = pedidoAgendamento.getCliente();
 
@@ -118,7 +121,7 @@ public class PedidoAgendamentoService {
     }
 
     public void negarPedido(Long id){
-        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow();
+        PedidoAgendamento pedidoAgendamento = pedidoAgendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido de agendamento não foi encontrado com ID: " + id));
         pedidoAgendamento.setStatus(Status.NEGADO);
 
         pedidoAgendamentoRepository.save(pedidoAgendamento);
