@@ -1,5 +1,7 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.BarbeiroDTO;
 import com.joaolucas.barbeariajj.models.dto.ClienteDTO;
 import com.joaolucas.barbeariajj.models.entities.Barbeiro;
@@ -22,13 +24,13 @@ public class BarbeiroService {
     }
 
     public BarbeiroDTO encontrarPorId(Long id){
-        return new BarbeiroDTO(barbeiroRepository.findById(id).orElseThrow());
+        return new BarbeiroDTO(barbeiroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + id)));
     }
 
     public BarbeiroDTO atualizar(Long id, BarbeiroDTO barbeiroDTO){
-        if(!ValidacaoDeDados.userValido(barbeiroDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.userValido(barbeiroDTO)) throw new BadRequestException("Dados do barbeiro são inválidos");
 
-        Barbeiro barbeiro = barbeiroRepository.findById(id).orElseThrow();
+        Barbeiro barbeiro = barbeiroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + id));
 
         if(barbeiroDTO.getNome() != null) barbeiro.setNome(barbeiroDTO.getNome());
         if(barbeiroDTO.getSobrenome() != null) barbeiro.setSobrenome(barbeiroDTO.getSobrenome());
@@ -41,7 +43,7 @@ public class BarbeiroService {
     }
 
     public void deletar(Long id){
-        Barbeiro barbeiro = barbeiroRepository.findById(id).orElseThrow();
+        Barbeiro barbeiro = barbeiroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + id));
         barbeiroRepository.delete(barbeiro);
     }
 }
