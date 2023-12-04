@@ -1,5 +1,8 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.BusinessLogicException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.ServicoDTO;
 import com.joaolucas.barbeariajj.models.entities.Barbeiro;
 import com.joaolucas.barbeariajj.models.entities.Servico;
@@ -23,11 +26,11 @@ public class ServicoService {
     }
 
     public ServicoDTO retornarServicoPorId(Long id){
-        return new ServicoDTO(servicoRepository.findById(id).orElseThrow());
+        return new ServicoDTO(servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + id)));
     }
 
     public ServicoDTO criar(ServicoDTO servicoDTO){
-        if(!ValidacaoDeDados.servicoValido(servicoDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.servicoValido(servicoDTO)) throw new BadRequestException("Dados do serviço inválidos");
 
         Servico servico = new Servico();
         servico.setNome(servicoDTO.getNome());
@@ -38,9 +41,9 @@ public class ServicoService {
     }
 
     public ServicoDTO atualizar(Long id, ServicoDTO servicoDTO){
-        if(!ValidacaoDeDados.servicoValido(servicoDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.servicoValido(servicoDTO)) throw new BadRequestException("Dados do serviço inválidos");
 
-        Servico servico = servicoRepository.findById(id).orElseThrow();
+        Servico servico = servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + id));
 
         if(servicoDTO.getNome() != null) servico.setNome(servicoDTO.getNome());
         if(servicoDTO.getDescricao() != null) servico.setDescricao(servicoDTO.getDescricao());
@@ -50,15 +53,15 @@ public class ServicoService {
     }
 
     public void deletar(Long id){
-        Servico servico = servicoRepository.findById(id).orElseThrow();
+        Servico servico = servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + id));
         servicoRepository.delete(servico);
     }
 
     public void adicionarBarbeiro(Long servicoId, Long barbeiroId){
-        Servico servico = servicoRepository.findById(servicoId).orElseThrow();
-        Barbeiro barbeiro = barbeiroRepository.findById(barbeiroId).orElseThrow();
+        Servico servico = servicoRepository.findById(servicoId).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + servicoId));
+        Barbeiro barbeiro = barbeiroRepository.findById(barbeiroId).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + barbeiroId));
 
-        if(servico.getBarbeirosEspecializados().contains(barbeiro) || barbeiro.getEspecialidades().contains(servico)) throw new RuntimeException();
+        if(servico.getBarbeirosEspecializados().contains(barbeiro) || barbeiro.getEspecialidades().contains(servico)) throw new BusinessLogicException("Barbeiro já está incluído na lista");
 
         servico.getBarbeirosEspecializados().add(barbeiro);
         barbeiro.getEspecialidades().add(servico);
@@ -68,10 +71,10 @@ public class ServicoService {
     }
 
     public void removerBarbeiro(Long servicoId, Long barbeiroId){
-        Servico servico = servicoRepository.findById(servicoId).orElseThrow();
-        Barbeiro barbeiro = barbeiroRepository.findById(barbeiroId).orElseThrow();
+        Servico servico = servicoRepository.findById(servicoId).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + servicoId));
+        Barbeiro barbeiro = barbeiroRepository.findById(barbeiroId).orElseThrow(() -> new ResourceNotFoundException("Barbeiro não foi encontrado com ID: " + barbeiroId));
 
-        if(!servico.getBarbeirosEspecializados().contains(barbeiro) || !barbeiro.getEspecialidades().contains(servico)) throw new RuntimeException();
+        if(!servico.getBarbeirosEspecializados().contains(barbeiro) || !barbeiro.getEspecialidades().contains(servico)) throw new BusinessLogicException("Barbeiro não está incluído na lista");
 
         servico.getBarbeirosEspecializados().remove(barbeiro);
         barbeiro.getEspecialidades().remove(servico);
