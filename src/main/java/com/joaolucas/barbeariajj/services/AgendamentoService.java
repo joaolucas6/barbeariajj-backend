@@ -1,5 +1,7 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.AgendamentoDTO;
 import com.joaolucas.barbeariajj.models.entities.Agendamento;
 import com.joaolucas.barbeariajj.repositories.AgendamentoRepository;
@@ -22,16 +24,16 @@ public class AgendamentoService {
     }
 
     public AgendamentoDTO encontrarPorId(Long id){
-        return new AgendamentoDTO(agendamentoRepository.findById(id).orElseThrow());
+        return new AgendamentoDTO(agendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Agendamento não foi encontrado com ID: " + id)));
     }
 
     public AgendamentoDTO atualizar(Long id, AgendamentoDTO agendamentoDTO){
-        if(!ValidacaoDeDados.agendamentoValido(agendamentoDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.agendamentoValido(agendamentoDTO)) throw new BadRequestException("Dados do agendamento são inválidos");
 
-        Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow();
+        Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Agendamento não foi encontrado com ID: " + id));
 
         if(agendamentoDTO.getServicosId() != null){
-            agendamento.setServicos(agendamentoDTO.getServicosId().stream().map(i -> servicoRepository.findById(i).orElseThrow()).toList());
+            agendamento.setServicos(agendamentoDTO.getServicosId().stream().map(i -> servicoRepository.findById(i).orElseThrow(() -> new ResourceNotFoundException("Serviço não foi encontrado com ID: " + i))).toList());
         }
 
         if(agendamentoDTO.getMetodoPagamento() != null) agendamento.setMetodoPagamento(agendamentoDTO.getMetodoPagamento());
@@ -44,7 +46,7 @@ public class AgendamentoService {
     }
 
     public void deletar(Long id){
-        Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow();
+        Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Agendamento não foi encontrado com ID: " + id));
         agendamentoRepository.delete(agendamento);
     }
 }
