@@ -1,5 +1,7 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.AdminDTO;
 import com.joaolucas.barbeariajj.models.entities.Admin;
 import com.joaolucas.barbeariajj.repositories.AdminRepository;
@@ -19,13 +21,13 @@ public class AdminService {
     }
 
     public AdminDTO encontrarPorId(Long id){
-        return new AdminDTO(adminRepository.findById(id).orElseThrow());
+        return new AdminDTO(adminRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Admin não foi encontrado com ID: " + id)));
     }
 
     public AdminDTO atualizar(Long id, AdminDTO adminDTO){
-        if(!ValidacaoDeDados.userValido(adminDTO)) throw new RuntimeException();
+        if(!ValidacaoDeDados.userValido(adminDTO)) throw new BadRequestException("Dados do admin são inválidos");
 
-        Admin admin = adminRepository.findById(id).orElseThrow();
+        Admin admin = adminRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Admin não foi encontrado com ID: " + id));
 
         if(adminDTO.getNome() != null) admin.setNome(adminDTO.getNome());
         if(adminDTO.getSobrenome() != null) admin.setSobrenome(adminDTO.getSobrenome());
@@ -38,7 +40,7 @@ public class AdminService {
     }
 
     public void deletar(Long id){
-        Admin admin = adminRepository.findById(id).orElseThrow();
+        Admin admin = adminRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Admin não foi encontrado com ID: " + id));
         adminRepository.delete(admin);
     }
 }
