@@ -1,5 +1,7 @@
 package com.joaolucas.barbeariajj.services;
 
+import com.joaolucas.barbeariajj.exceptions.BadRequestException;
+import com.joaolucas.barbeariajj.exceptions.ResourceNotFoundException;
 import com.joaolucas.barbeariajj.models.dto.AvaliacaoDTO;
 import com.joaolucas.barbeariajj.models.entities.Agendamento;
 import com.joaolucas.barbeariajj.models.entities.Avaliacao;
@@ -32,13 +34,13 @@ public class AvaliacaoService {
     }
 
     public AvaliacaoDTO encontrarPorId(Long id){
-        return new AvaliacaoDTO(avaliacaoRepository.findById(id).orElseThrow());
+        return new AvaliacaoDTO(avaliacaoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Avaliação não foi encontrada com ID: " + id)));
     }
 
     public AvaliacaoDTO criar(Long agendamentoId, AvaliacaoDTO avaliacaoDTO){
-        if(!ValidacaoDeDados.avaliacaoValido(avaliacaoDTO, false)) throw new RuntimeException();
+        if(!ValidacaoDeDados.avaliacaoValido(avaliacaoDTO, false)) throw new BadRequestException("Dados da avaliação são inválidas");
 
-        Agendamento agendamento = agendamentoRepository.findById(agendamentoId).orElseThrow();
+        Agendamento agendamento = agendamentoRepository.findById(agendamentoId).orElseThrow(() -> new ResourceNotFoundException("Agendamento não foi encontrado com ID: " + agendamentoId));
         Barbeiro barbeiro = agendamento.getBarbeiro();
         Cliente cliente = agendamento.getCliente();
 
@@ -64,9 +66,9 @@ public class AvaliacaoService {
     }
 
     public AvaliacaoDTO atualizar(Long id, AvaliacaoDTO avaliacaoDTO){
-        if(!ValidacaoDeDados.avaliacaoValido(avaliacaoDTO, true)) throw new RuntimeException();
+        if(!ValidacaoDeDados.avaliacaoValido(avaliacaoDTO, true)) throw new BadRequestException("Dados da avaliação são inválidos");
 
-        Avaliacao avaliacao = avaliacaoRepository.findById(id).orElseThrow();
+        Avaliacao avaliacao = avaliacaoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Avaliação não foi encontrada com ID: " + id));
 
         if(avaliacaoDTO.getNota() != null) avaliacao.setNota(avaliacaoDTO.getNota());
         if(avaliacaoDTO.getComentarios() != null) avaliacao.setComentarios(avaliacaoDTO.getComentarios());
@@ -75,7 +77,7 @@ public class AvaliacaoService {
     }
 
     public void deletar(Long id){
-        Avaliacao avaliacao = avaliacaoRepository.findById(id).orElseThrow();
+        Avaliacao avaliacao = avaliacaoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Avaliação não foi encontrada com ID: " + id));
         avaliacao.getAgendamento().setAvaliacaoDoCliente(null);
         avaliacaoRepository.delete(avaliacao);
     }
