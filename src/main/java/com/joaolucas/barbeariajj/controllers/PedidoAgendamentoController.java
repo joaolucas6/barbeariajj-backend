@@ -1,7 +1,6 @@
 package com.joaolucas.barbeariajj.controllers;
 
 import com.joaolucas.barbeariajj.models.dto.PedidoAgendamentoDTO;
-import com.joaolucas.barbeariajj.models.entities.PedidoAgendamento;
 import com.joaolucas.barbeariajj.services.PedidoAgendamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +52,5 @@ public class PedidoAgendamentoController {
         pedidoAgendamentoService.negarPedido(id);
         return ResponseEntity.ok().build();
     }
-    
+
 }
