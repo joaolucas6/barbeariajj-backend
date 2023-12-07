@@ -21,17 +21,17 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> encontrarPorId(Long id){
+    public ResponseEntity<ClienteDTO> encontrarPorId(@PathVariable Long id){
         return ResponseEntity.ok(clienteService.encontrarPorId(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(Long id, ClienteDTO clienteDTO){
+    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO){
         return ResponseEntity.ok(clienteService.atualizar(id, clienteDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
         clienteService.deletar(id);
         return ResponseEntity.ok().build();
     }
