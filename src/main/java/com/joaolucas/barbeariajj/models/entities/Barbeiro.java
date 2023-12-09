@@ -21,7 +21,7 @@ public class Barbeiro extends User {
     private List<Agendamento> agendamentos = new ArrayList<>();
     @OneToMany(mappedBy = "barbeiro")
     private List<Avaliacao> avaliacoes = new ArrayList<>();
-    @ManyToMany(mappedBy = "barbeiro")
+    @ManyToMany(mappedBy = "barbeirosEspecializados")
     private List<Servico> especialidades = new ArrayList<>();
 
     public Barbeiro() {

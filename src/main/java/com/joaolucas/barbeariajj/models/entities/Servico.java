@@ -20,7 +20,7 @@ public class Servico {
     private String descricao;
     @Column(name = "preco")
     private BigDecimal preco;
-    @OneToMany(mappedBy = "servico")
+    @ManyToMany(mappedBy = "servicos")
     private List<PedidoAgendamento> pedidosAgendamento = new ArrayList<>();
     @ManyToMany(mappedBy = "servicos")
     private List<Agendamento> agendamentos = new ArrayList<>();
