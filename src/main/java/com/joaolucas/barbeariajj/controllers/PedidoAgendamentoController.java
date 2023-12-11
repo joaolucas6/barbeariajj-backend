@@ -20,7 +20,7 @@ public class PedidoAgendamentoController {
         return ResponseEntity.ok(pedidoAgendamentoService.encontrarTodos());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<PedidoAgendamentoDTO> encontrarPorId(@PathVariable Long id){
         return ResponseEntity.ok(pedidoAgendamentoService.encontrarPorId(id));
     }
@@ -41,13 +41,13 @@ public class PedidoAgendamentoController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/aceitar-pedido/{id}")
     public ResponseEntity<Void> aceitarPedido(@PathVariable Long id){
         pedidoAgendamentoService.aceitarPedido(id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/negar-pedido/{id}")
     public ResponseEntity<Void> negarPedido(@PathVariable Long id){
         pedidoAgendamentoService.negarPedido(id);
         return ResponseEntity.ok().build();

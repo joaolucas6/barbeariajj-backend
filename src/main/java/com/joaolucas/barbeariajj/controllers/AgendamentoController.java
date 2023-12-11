@@ -20,7 +20,7 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoService.encontrarTodos());
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<AgendamentoDTO> encontrarPorId(@PathVariable Long id){
         return ResponseEntity.ok(agendamentoService.encontrarPorId(id));
     }
